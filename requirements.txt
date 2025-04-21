@@ -1,0 +1,21 @@
+torch>=1.13.0
+torchvision>=0.14.0
+torchaudio>=0.13.0
+
+# Image processing
+opencv-python
+scikit-image
+Pillow
+numpy
+matplotlib
+
+# Evaluation
+facenet-pytorch
+lpips
+
+# Experiment tracking
+wandb
+tensorboard
+
+# Development tools
+jupyter
