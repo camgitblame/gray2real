@@ -51,15 +51,18 @@ def make_side_by_side(sketch, fake, photo, normalize=False):
 
 
 def train(opt):
+    # 🏷️ Add prefix for logging jobs – use experiment name
+    log_prefix = f"[{opt.name}]"
+
     # 🔵 Set device for GPU/CPU with respect to opt.gpu_ids
     device = torch.device(
         "cuda" if torch.cuda.is_available() and opt.gpu_ids[0] >= 0 else "cpu"
     )
 
     if device.type == "cuda":
-        print(f"🚀 Using GPU: {torch.cuda.get_device_name(device)}")
+        print(f"{log_prefix} 🚀 Using GPU: {torch.cuda.get_device_name(device)}")
     else:
-        print("🐢 Using CPU")
+        print(f"{log_prefix} 🐢 Using CPU")
 
     # 🔖 Initialize WandB logging with group/tag setup
     wandb.init(
@@ -109,7 +112,7 @@ def train(opt):
     # 📦 Load dataset
     dataset = create_dataset(opt)
     dataset_size = len(dataset)
-    print(f"🖼️ The number of training images = {dataset_size}")
+    print(f"{log_prefix} 🖼️ The number of training images = {dataset_size}")
 
     # 🧱 Create model
     model = create_model(opt)
@@ -125,7 +128,7 @@ def train(opt):
     total_iters = 0
     max_epochs = opt.niter + opt.niter_decay + 1
     print(
-        f"📆 Training will run for {max_epochs - 1} epochs total ({opt.niter} + {opt.niter_decay})"
+        f"{log_prefix} 📆 Training will run for {max_epochs - 1} epochs total ({opt.niter} + {opt.niter_decay})"
     )
 
     # 🔁 Epoch loop
@@ -169,7 +172,7 @@ def train(opt):
             # 💾 Save latest model periodically
             if total_iters % opt.save_latest_freq == 0:
                 print(
-                    f"💾 Saving latest model (epoch {epoch}, total_iters {total_iters})"
+                    f"{log_prefix} 💾 Saving latest model (epoch {epoch}, total_iters {total_iters})"
                 )
                 save_suffix = "iter_%d" % total_iters if opt.save_by_iter else "latest"
                 model.save_networks(save_suffix)
@@ -178,11 +181,11 @@ def train(opt):
 
         # 💾 Save checkpoint at the end of the epoch
         if epoch % opt.save_epoch_freq == 0:
-            print(f"📦 Saving model at epoch {epoch}, iters {total_iters}")
+            print(f"{log_prefix} 📦 Saving model at epoch {epoch}, iters {total_iters}")
             model.save_networks(epoch)
 
         print(
-            f"✅ End of epoch {epoch} / {opt.niter + opt.niter_decay} ⏱️ Time Taken: {int(time.time() - epoch_start_time)} sec"
+            f"{log_prefix} ✅ End of epoch {epoch} / {opt.niter + opt.niter_decay} ⏱️ Time Taken: {int(time.time() - epoch_start_time)} sec"
         )
 
         # 💾 Save the latest model checkpoint

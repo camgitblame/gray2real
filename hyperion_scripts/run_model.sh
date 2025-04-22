@@ -6,7 +6,7 @@
 #SBATCH --ntasks=1                                      # 🚶 1 task
 #SBATCH --cpus-per-task=4                               # 🧵 4 CPU threads
 #SBATCH --mem=16G                                       # 💾 Memory
-#SBATCH --time=02:00:00                                 # ⏳ 2 h time limit
+#SBATCH --time=12:00:00                               # ⏳ 12 h time limit
 #SBATCH --output=$(pwd)/results/%x_%j.out               # 📤 Stdout
 #SBATCH --error=$(pwd)/results/%x_%j.err                # 📥 Stderr
                      
