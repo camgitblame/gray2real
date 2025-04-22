@@ -37,7 +37,10 @@ def test(opt):
     model = create_model(opt)  # Create and return model based on opt.model
     model.setup(opt)
 
-    web_dir = os.path.join("./results", opt.name, f"{opt.phase}_{opt.epoch}")
+    web_dir = os.path.join(
+        "./results", opt.name, f"{opt.phase}_{opt.epoch or 'latest'}"
+    )
+
     webpage = html.HTML(web_dir, f"Experiment = {opt.name}", refresh=1)
 
     # ------------------- 🚀 Initialize WandB logger -------------------
