@@ -123,7 +123,10 @@ def train(opt):
 
     visualizer = Visualizer(opt)
     total_iters = 0
-    max_epochs = min(opt.max_epochs, opt.niter + opt.niter_decay) + 1
+    max_epochs = opt.niter + opt.niter_decay + 1
+    print(
+        f"📆 Training will run for {max_epochs - 1} epochs total ({opt.niter} + {opt.niter_decay})"
+    )
 
     # 🔁 Epoch loop
     for epoch in range(opt.epoch_count, max_epochs):
