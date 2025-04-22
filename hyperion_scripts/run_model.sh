@@ -17,6 +17,7 @@ EXPERIMENT_NAME=${EXPERIMENT_NAME:-gray2real_experiment}
 DATASET=${DATASET:-./datasets/cuhk}
 DIRECTION=${DIRECTION:-gray2real}
 GPU_ID=${GPU_ID:-0}
+
 # ===== ⚙️ More Customization =====
 NITER=${NITER:-150} # Number of epochs before LR decay
 NITER_DECAY=${NITER_DECAY:-100} # Number of epochs with decaying LR
@@ -25,7 +26,7 @@ SAVE_EPOCH_FREQ=${SAVE_EPOCH_FREQ:-5} # Save model every N epochs
 SAVE_LATEST_FREQ=${SAVE_LATEST_FREQ:-1000} # Save latest model every N iterations
 SAVE_BY_ITER=${SAVE_BY_ITER:-true} # Save checkpoints by iteration
 DISPLAY_ID=${DISPLAY_ID:-0}
-OFFLINE=${OFFLINE:-false}  # WandB online mode
+OFFLINE=${OFFLINE:-false}  # Default WandB online mode
 
 # 🛑 Validate MODEL_TYPE
 VALID_MODELS=("gray2real_baseline" "gray2real" "cgan_initial" "cgan_final" "cgan_both" "attention")
@@ -83,8 +84,8 @@ echo "🧠 Model Type      : $MODEL_TYPE"
 echo "📁 Dataset         : $DATASET"
 echo "📂 Experiment Name : $EXPERIMENT_NAME"
 echo "➡️  Direction       : $DIRECTION"
-echo "🎨 Input Channels  : 1"
-echo "🌈 Output Channels : 3"
+# echo "🎨 Input Channels  : 1"
+# echo "🌈 Output Channels : 3"
 
 
 python3 train.py \
