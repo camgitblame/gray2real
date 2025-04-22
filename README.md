@@ -166,4 +166,22 @@ results/logs/<MODEL_NAME>_<JOBID>.out
 
 Make sure your environment is activated and configured before launching or tailing jobs.
 
+## 🧪 Testing a Trained Model
 
+To test a specific checkpoint:
+```bash
+python test.py \
+  --dataroot ./datasets/cuhk \
+  --name gray2real_final \
+  --model gray2real \
+  --epoch 300
+```
+
+To test the latest checkpoint:
+```bash
+python test.py \
+  --dataroot ./datasets/cuhk \
+  --name gray2real_final \
+  --model gray2real \
+  --epoch latest
+```
