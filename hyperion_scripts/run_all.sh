@@ -77,3 +77,17 @@ OFFLINE=$OFFLINE \
 done
 
 echo "🚀 All training jobs submitted. Use 'squeue -u $USER' or tail logs to monitor."
+
+echo ""
+echo "📊 Summary of submitted jobs:"
+for MODEL_TYPE in "${MODELS[@]}"; do
+  echo "  ➤ $MODEL_TYPE → logs: results/logs/${MODEL_TYPE}_<JOBID>.out"
+done
+
+echo ""
+echo "🛠️  To monitor training progress:"
+echo "  • Check logs:      tail -f results/logs/*.out"
+echo "  • Job queue:       squeue -u $USER"
+echo "  • Finished jobs:   sacct -u $USER --format=JobID,JobName,State,Elapsed"
+echo "  • WandB dashboard: https://wandb.ai"
+echo ""
