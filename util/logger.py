@@ -20,7 +20,7 @@ class Logger:
             config=config or {},
             group=group,  # Group runs (e.g. per model type)
             tags=tags or [],  # Custom tags (e.g. 'baseline', 'final')
-            mode=mode,  # 🌐 Set mode: "online" or "offline"
+            mode=mode,  # Set mode: "online" or "offline"
         )
         self.step = 0  # 🔢 Internal step tracker for consistent logging
 
@@ -29,7 +29,7 @@ class Logger:
         device_name = (
             torch.cuda.get_device_name(device) if device.type == "cuda" else "CPU"
         )
-        wandb.config.update({"device": device_name})  # 📋 Store device info in config
+        wandb.config.update({"device": device_name})  # Store device info in config
         print(f"📝 Logged device to WandB: {device_name}")
 
     def log(self, metrics: dict, step=None):
@@ -46,27 +46,25 @@ class Logger:
             for label, img in image_dict.items()
         }
         wandb.log(log_dict, step=self.step)
-        self.step += 1  # 🔁 Increment step to prevent WandB drop warnings 🚨
+        self.step += 1  # Increment step to prevent WandB drop warnings
 
     # Side-by-side image comparison
     def log_comparison(self, sketch, fake, photo, label="comparison"):
         # 🧩 Combine sketch, generated, and real images in a comparison grid
         grid = vutils.make_grid(
-            torch.cat(
-                [sketch, fake, photo], dim=0
-            ),  # 🪄 Concatenate along vertical axis
-            nrow=3,  # 📐 Arrange in a row: [sketch | fake | real]
+            torch.cat([sketch, fake, photo], dim=0),  # Concatenate along vertical axis
+            nrow=3,  # Arrange in a row: [sketch | fake | real]
             normalize=True,
             scale_each=True,
             pad_value=255,
         )
         wandb.log({label: wandb.Image(grid)}, step=self.step)
-        self.step += 1  # 🔁 Always increment step for visual logs too 🖼️✅
+        self.step += 1  # Increment step for visual logs
 
     def increment_step(self):
         # ➕ Manually bump step counter if needed (e.g. custom loop)
         self.step += 1
 
     def finish(self):
-        # ✅ Finalize and close the WandB run
+        # Finalize and close the WandB run
         self.run.finish()

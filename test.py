@@ -97,7 +97,7 @@ def test(opt):
             # print(f"🖼️ {label} ready. Size: {image_pil.size}")
 
         logger.step = i
-        # 🧪 Final sanity check on images before WandB log
+        # 🧪 Sanity check on images before WandB log
         # for label, image in images_to_log.items():
         #     print(
         #         f"[CHECK] {label}: type={type(image)}, size={getattr(image, 'size', 'N/A')}"

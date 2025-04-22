@@ -182,6 +182,9 @@ def train(opt):
             f"✅ End of epoch {epoch} / {opt.niter + opt.niter_decay} ⏱️ Time Taken: {int(time.time() - epoch_start_time)} sec"
         )
 
+        # 💾 Save the latest model checkpoint
+        model.save_networks("latest")
+
         # 🖼️ Log visuals once per N epochs
         if epoch % 5 == 0 or epoch == 1:
             visuals = model.get_current_visuals()
