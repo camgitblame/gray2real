@@ -132,7 +132,7 @@ PRINT_FREQ=50 \
 SAVE_BY_ITER=false \
 GPU_ID=0 \
 ./run_model.sh
-
+```
 
 
 ## 🛠️ Advanced
