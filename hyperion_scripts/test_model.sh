@@ -17,7 +17,9 @@ DATASET=${DATASET:-./datasets/cuhk}
 DIRECTION=${DIRECTION:-gray2real}
 GPU_ID=${GPU_ID:-0}
 NUM_TEST=${NUM_TEST:-50}
+EPOCH=${EPOCH:-latest}
 CHECKPOINTS_DIR=${CHECKPOINTS_DIR:-./checkpoints}
+
 
 # 🛑 Validate MODEL_TYPE
 VALID_MODELS=("gray2real_baseline" "gray2real" "cgan_initial" "cgan_final" "cgan_both" "sketch2face" "attention")
