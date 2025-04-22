@@ -25,7 +25,6 @@ PRINT_FREQ=${PRINT_FREQ:-100} # Log every N steps
 SAVE_EPOCH_FREQ=${SAVE_EPOCH_FREQ:-5} # Save model every N epochs
 SAVE_LATEST_FREQ=${SAVE_LATEST_FREQ:-1000} # Save latest model every N iterations
 SAVE_BY_ITER=${SAVE_BY_ITER:-true} # Save checkpoints by iteration
-DISPLAY_ID=${DISPLAY_ID:-0}
 OFFLINE=${OFFLINE:-false}  # Default WandB online mode
 
 # 🛑 Validate MODEL_TYPE
@@ -106,7 +105,6 @@ python3 train.py \
 --save_latest_freq "$SAVE_LATEST_FREQ" \
 $( [[ "$SAVE_BY_ITER" == "true" ]] && echo "--save_by_iter" ) \
 $( [[ "$OFFLINE" == "true" ]] && echo "--offline" ) \
---display_id "$DISPLAY_ID" \
 --verbose
 
 
