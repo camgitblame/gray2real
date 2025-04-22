@@ -40,6 +40,14 @@ mkdir -p results/logs
 # ===== 🚀 Submit Training Jobs =====
 for MODEL_TYPE in "${MODELS[@]}"; do
   EXPERIMENT_NAME="${MODEL_TYPE}_final"
+
+  # 🧠 Check if model implementation exists
+  MODEL_PATH="models/${MODEL_TYPE}_model.py"
+  if [[ ! -f "$MODEL_PATH" ]]; then
+    echo "⚠️ Skipping $MODEL_TYPE — model not implemented yet"
+    continue
+  fi
+
   echo "📤 Submitting training for $MODEL_TYPE"
 
   sbatch --job-name="$MODEL_TYPE" \
