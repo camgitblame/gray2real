@@ -39,7 +39,7 @@ mkdir -p results/logs
 
 # ===== 🚀 Submit Training Jobs =====
 for MODEL_TYPE in "${MODELS[@]}"; do
-  EXPERIMENT_NAME="${MODEL_TYPE}_final"
+  EXPERIMENT_NAME="${MODEL_TYPE}"
 
   # 🧠 Check if model implementation exists
   MODEL_PATH="models/${MODEL_TYPE}_model.py"
