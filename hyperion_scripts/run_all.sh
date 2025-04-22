@@ -7,8 +7,8 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=2G                                        # 🧹 Minimal mem just for launching
 #SBATCH --time=00:10:00                                 # ⏳ Short time limit to submit jobs
-#SBATCH --output=$(pwd)/results/run_all_%j.out          # 📤 Master output
-#SBATCH --error=$(pwd)/results/run_all_%j.err           # 📥 Master error
+#SBATCH --output=results/%x_%j.out          # 📤 Master output
+#SBATCH --error=results/%x_%j.err          # 📥 Master error
 
 # ===== 🧠 SLURM self-submission =====
 if [ -z "$SLURM_JOB_ID" ]; then

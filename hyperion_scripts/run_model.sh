@@ -7,8 +7,9 @@
 #SBATCH --cpus-per-task=4                               # 🧵 4 CPU threads
 #SBATCH --mem=16G                                       # 💾 Memory
 #SBATCH --time=12:00:00                               # ⏳ 12 h time limit
-#SBATCH --output=$(pwd)/results/%x_%j.out               # 📤 Stdout
-#SBATCH --error=$(pwd)/results/%x_%j.err                # 📥 Stderr
+#SBATCH --output=results/%x_%j.out
+#SBATCH --error=results/%x_%j.err
+
                      
 
 # ===== 🧩 Configurable Parameters =====
