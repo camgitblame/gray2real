@@ -93,9 +93,19 @@ class BaseModel(ABC):
             self.schedulers = [
                 networks.get_scheduler(optimizer, opt) for optimizer in self.optimizers
             ]
+
         if not self.isTrain or opt.continue_train:
-            load_suffix = "iter_%d" % opt.load_iter if opt.load_iter > 0 else opt.epoch
+            if opt.load_iter > 0:
+                load_suffix = f"iter_{opt.load_iter}"
+            elif str(opt.epoch).lower() == "latest":
+                load_suffix = "latest"
+            else:
+                load_suffix = opt.epoch
+            print(
+                f"[{opt.name}] 📦 Loading model checkpoint with suffix: {load_suffix}"
+            )
             self.load_networks(load_suffix)
+
         self.print_networks(opt.verbose)
 
     def eval(self):
@@ -185,36 +195,49 @@ class BaseModel(ABC):
             )
 
     def load_networks(self, epoch):
-        """Load all the networks from the disk.
+        """Load all the networks from disk.
 
         Parameters:
-            epoch (int) -- current epoch; used in the file name '%s_net_%s.pth' % (epoch, name)
+            epoch (str or int) -- current epoch or 'latest'; used in the file name '%s_net_%s.pth' % (epoch, name)
         """
         for name in self.model_names:
             if isinstance(name, str):
-                load_filename = "%s_net_%s.pth" % (epoch, name)
-                if "G_2" in name and not os.path.isfile(
-                    os.path.join(self.save_dir, load_filename)
-                ):
-                    load_filename = "%s_net_%s.pth" % (epoch, name[0])
-                load_path = os.path.join(self.save_dir, load_filename)
+                # Determine checkpoint filename
+                load_filename = f"{epoch}_net_{name}.pth"
+                full_path = os.path.join(self.save_dir, load_filename)
+
+                # Optional fallback for "G_2" -> "G" if not found
+                if "G_2" in name and not os.path.isfile(full_path):
+                    fallback_name = name[0]  # first character e.g., "G"
+                    fallback_filename = f"{epoch}_net_{fallback_name}.pth"
+                    full_path = os.path.join(self.save_dir, fallback_filename)
+                    print(f"⚠️  Fallback: using {fallback_filename} for {name}")
+
+                # Check file exists
+                if not os.path.isfile(full_path):
+                    print(f"❌ Checkpoint file not found: {full_path}")
+                    print(
+                        f"💡 Hint: make sure you passed the correct --epoch or --load_iter."
+                    )
+                    continue
+
+                print(f"📥 Loading weights for '{name}' from {full_path}")
+
+                # Load model
                 net = getattr(self, "net" + name)
                 if isinstance(net, torch.nn.DataParallel):
                     net = net.module
-                print("loading the model from %s" % load_path)
-                # if you are using PyTorch newer than 0.4 (e.g., built from
-                # GitHub source), you can remove str() on self.device
-                state_dict = torch.load(load_path, map_location=str(self.device))
+
+                state_dict = torch.load(full_path, map_location=str(self.device))
                 if hasattr(state_dict, "_metadata"):
                     del state_dict._metadata
 
-                # patch InstanceNorm checkpoints prior to 0.4
-                for key in list(
-                    state_dict.keys()
-                ):  # need to copy keys here because we mutate in loop
+                # Patch old InstanceNorm compatibility
+                for key in list(state_dict.keys()):
                     self.__patch_instance_norm_state_dict(
                         state_dict, net, key.split(".")
                     )
+
                 net.load_state_dict(state_dict)
 
     def print_networks(self, verbose):
@@ -239,7 +262,8 @@ class BaseModel(ABC):
         print("-----------------------------------------------")
 
     def set_requires_grad(self, nets, requires_grad=False):
-        """Set requies_grad=Fasle for all the networks to avoid unnecessary computations
+        """Set requires_grad=False for all the networks to avoid unnecessary computations
+
         Parameters:
             nets (network list)   -- a list of networks
             requires_grad (bool)  -- whether the networks require gradients or not
