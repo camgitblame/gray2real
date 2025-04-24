@@ -5,7 +5,8 @@ import torch
 import numpy as np
 from PIL import Image
 import os
-from . import html
+
+# from . import html
 
 
 def tensor2im(input_image, imtype=np.uint8):

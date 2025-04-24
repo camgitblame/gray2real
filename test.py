@@ -16,8 +16,9 @@ from PIL import Image  # Convert image arrays to PIL format for WandB
 from util.logger import Logger  # WandB logger wrapper
 import numpy as np
 import torch
-from util.util import save_images
-from util import html  # 👈 for HTML logging
+
+
+# from util import html  # 👈 for HTML logging
 
 
 def test(opt):
@@ -37,11 +38,11 @@ def test(opt):
     model = create_model(opt)  # Create and return model based on opt.model
     model.setup(opt)
 
-    web_dir = os.path.join(
-        "./results", opt.name, f"{opt.phase}_{opt.epoch or 'latest'}"
-    )
+    # web_dir = os.path.join(
+    #     "./results", opt.name, f"{opt.phase}_{opt.epoch or 'latest'}"
+    # )
 
-    webpage = html.HTML(web_dir, f"Experiment = {opt.name}", refresh=1)
+    # webpage = html.HTML(web_dir, f"Experiment = {opt.name}", refresh=1)
 
     # ------------------- 🚀 Initialize WandB logger -------------------
     logger = Logger(
@@ -77,14 +78,14 @@ def test(opt):
         img_path = model.get_image_paths()
         print(f"📂 Image path: {img_path}")
 
-        # 🖼️ Save visual outputs to HTML + PNGs
-        save_images(
-            webpage,
-            visuals,
-            img_path,
-            aspect_ratio=opt.aspect_ratio,
-            width=opt.display_winsize,
-        )
+        # # 🖼️ Save visual outputs to HTML + PNGs
+        # save_images(
+        #     webpage,
+        #     visuals,
+        #     img_path,
+        #     aspect_ratio=opt.aspect_ratio,
+        #     width=opt.display_winsize,
+        # )
 
         if not visuals:
             print(f"🚫 No visuals returned at step {i}")
@@ -108,9 +109,20 @@ def test(opt):
 
         logger.log_images(images_to_log, caption_prefix=f"Image {i}: ")
         logger.increment_step()
-        # print(f"✅ Logged image {i} to WandB\n")
 
-    webpage.save()
+        # 💾 Save images locally for evaluation notebook
+        local_save_dir = os.path.join(
+            "results", opt.name, f"{opt.phase}_{opt.epoch or 'latest'}", "images"
+        )
+        os.makedirs(local_save_dir, exist_ok=True)
+
+        for label, image_pil in images_to_log.items():
+            filename = f"{i:04d}_{label}.png"
+            save_path = os.path.join(local_save_dir, filename)
+            image_pil.save(save_path)
+            print(f"🖼️ Saved: {save_path}")
+
+    # webpage.save()
 
     # ------------------- Finish WandB run -------------------
     logger.finish()
