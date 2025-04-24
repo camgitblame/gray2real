@@ -112,7 +112,11 @@ class BaseModel(ABC):
         """Make models eval mode during test time"""
         for name in self.model_names:
             if isinstance(name, str):
-                net = getattr(self, "net" + name)
+                net = getattr(self, "net" + name, None)
+                if net is None:
+                    print(f"⚠️  Skipping '{name}' (not defined in this model).")
+                    continue
+
                 net.eval()
 
     def test(self):
@@ -207,7 +211,13 @@ class BaseModel(ABC):
                 full_path = os.path.join(self.save_dir, load_filename)
 
                 # Optional fallback for "G_2" -> "G" if not found
-                if "G_2" in name and not os.path.isfile(full_path):
+                if (
+                    "G_2" in name
+                    and not os.path.isfile(full_path)
+                    and hasattr(self, "netG2")
+                    and self.netG2 is not None
+                ):
+
                     fallback_name = name[0]  # first character e.g., "G"
                     fallback_filename = f"{epoch}_net_{fallback_name}.pth"
                     full_path = os.path.join(self.save_dir, fallback_filename)
@@ -224,7 +234,11 @@ class BaseModel(ABC):
                 print(f"📥 Loading weights for '{name}' from {full_path}")
 
                 # Load model
-                net = getattr(self, "net" + name)
+                net = getattr(self, "net" + name, None)
+                if net is None:
+                    print(f"⚠️  Skipping '{name}' (not defined in this model).")
+                    continue
+
                 if isinstance(net, torch.nn.DataParallel):
                     net = net.module
 

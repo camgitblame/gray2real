@@ -54,6 +54,8 @@ class Gray2RealBaselineModel(BaseModel):
             )
             self.optimizers.append(self.optimizer_G)
             self.optimizers.append(self.optimizer_D)
+        # Maintain compatibility with shared testing pipeline
+        self.netG2 = None
 
     def set_input(self, input):
         assert self.opt.direction in ["gray2real", "face2sketch"]
