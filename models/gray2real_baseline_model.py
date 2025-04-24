@@ -19,6 +19,9 @@ class Gray2RealBaselineModel(BaseModel):
         self.loss_names = ["G_GAN", "G_L1", "D_real", "D_fake"]
         self.visual_names = ["real_A", "fake_B", "real_B"]
         self.model_names = ["G", "D"] if self.isTrain else ["G"]
+        # ✅ Ensure G_2 is not part of model_names
+        if "G_2" in self.model_names:
+            self.model_names.remove("G_2")
 
         self.netG = networks.define_G(
             opt.input_nc,
@@ -56,6 +59,11 @@ class Gray2RealBaselineModel(BaseModel):
             self.optimizers.append(self.optimizer_D)
         # Maintain compatibility with shared testing pipeline
         self.netG2 = None
+        # Prevent accidental loading or logging of G_2
+        if "G_2" in self.model_names:
+            self.model_names.remove("G_2")
+        if hasattr(self, "netG2"):
+            del self.netG2
 
     def set_input(self, input):
         assert self.opt.direction in ["gray2real", "face2sketch"]

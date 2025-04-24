@@ -16,6 +16,7 @@ from PIL import Image  # Convert image arrays to PIL format for WandB
 from util.logger import Logger  # WandB logger wrapper
 import numpy as np
 import torch
+from collections import OrderedDict
 
 
 # from util import html  # 👈 for HTML logging
@@ -38,11 +39,7 @@ def test(opt):
     model = create_model(opt)  # Create and return model based on opt.model
     model.setup(opt)
 
-    # web_dir = os.path.join(
-    #     "./results", opt.name, f"{opt.phase}_{opt.epoch or 'latest'}"
-    # )
-
-    # webpage = html.HTML(web_dir, f"Experiment = {opt.name}", refresh=1)
+    print("🧪 Active model components:", model.model_names)
 
     # ------------------- 🚀 Initialize WandB logger -------------------
     logger = Logger(
@@ -72,41 +69,30 @@ def test(opt):
 
         model.compute_visuals()
 
-        visuals = model.get_current_visuals()
-        print(f"🔍 Visuals keys: {list(visuals.keys())}")
+        visuals = OrderedDict()
+        for name in model.visual_names:
+            if hasattr(model, name):
+                val = getattr(model, name)
+                if name == "fake_B_2" and getattr(model, "netG2", None) is None:
+                    continue  # ⚠️ Skip fake_B_2 if netG2 is not defined in this model
+                visuals[name] = val
+
+        print(f"🔍 Model Visuals keys: {list(visuals.keys())}")
 
         img_path = model.get_image_paths()
         print(f"📂 Image path: {img_path}")
-
-        # # 🖼️ Save visual outputs to HTML + PNGs
-        # save_images(
-        #     webpage,
-        #     visuals,
-        #     img_path,
-        #     aspect_ratio=opt.aspect_ratio,
-        #     width=opt.display_winsize,
-        # )
 
         if not visuals:
             print(f"🚫 No visuals returned at step {i}")
             continue
 
         # 📝 Log images to WandB
-        images_to_log = {}
-        for label, image_tensor in visuals.items():
-            # print(f"📸 Processing {label}...")
-            image_numpy = util.tensor2im(image_tensor)
-            image_pil = Image.fromarray(image_numpy)
-            images_to_log[label] = image_pil
-            # print(f"🖼️ {label} ready. Size: {image_pil.size}")
+        images_to_log = {
+            name: Image.fromarray(util.tensor2im(image_tensor))
+            for name, image_tensor in visuals.items()
+        }
 
         logger.step = i
-        # 🧪 Sanity check on images before WandB log
-        # for label, image in images_to_log.items():
-        #     print(
-        #         f"[CHECK] {label}: type={type(image)}, size={getattr(image, 'size', 'N/A')}"
-        #     )
-
         logger.log_images(images_to_log, caption_prefix=f"Image {i}: ")
         logger.increment_step()
 
@@ -121,8 +107,6 @@ def test(opt):
             save_path = os.path.join(local_save_dir, filename)
             image_pil.save(save_path)
             print(f"🖼️ Saved: {save_path}")
-
-    # webpage.save()
 
     # ------------------- Finish WandB run -------------------
     logger.finish()
