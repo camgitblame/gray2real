@@ -19,9 +19,6 @@ import torch
 from collections import OrderedDict
 
 
-# from util import html  # 👈 for HTML logging
-
-
 def test(opt):
     # ------------------- ⚙️ Hard-code test-time parameters -------------------
     opt.num_threads = 0  # Use single thread
@@ -73,7 +70,8 @@ def test(opt):
         for name in model.visual_names:
             if hasattr(model, name):
                 val = getattr(model, name)
-                if name == "fake_B_2" and getattr(model, "netG2", None) is None:
+                if name == "fake_B_2" and getattr(model, "netG_2", None) is None:
+
                     continue  # ⚠️ Skip fake_B_2 if netG2 is not defined in this model
                 visuals[name] = val
 
