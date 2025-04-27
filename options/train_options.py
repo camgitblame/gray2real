@@ -136,12 +136,29 @@ class TrainOptions(BaseOptions):
             help="Maximum number of epochs to run. Will stop earlier based on niter + niter_decay.",
         )
 
-        # # 🔵 Hyperion path toggle
-        # parser.add_argument(
-        #     "--hyperion",
-        #     action="store_true",
-        #     help="If set, uses the Hyperion-specific dataroot path.",
-        # )
+        # ---------------------- Loss Mode & Weights ----------------------
+
+        parser.add_argument(
+            "--loss_mode",
+            type=str,
+            default="default",
+            choices=["default", "vgg", "id", "both"],
+            help="Which extra loss to apply: VGG, identity (FaceNet), or both.",
+        )
+
+        parser.add_argument(
+            "--lambda_vgg",
+            type=float,
+            default=10.0,
+            help="Weight for VGG perceptual loss.",
+        )
+
+        parser.add_argument(
+            "--lambda_id",
+            type=float,
+            default=5.0,
+            help="Weight for identity loss (FaceNet embedding distance).",
+        )
 
         # Set training mode flag
         self.isTrain = True

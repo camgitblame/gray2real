@@ -23,7 +23,15 @@ class Gray2RealModel(BaseModel):
 
     def __init__(self, opt):
         BaseModel.__init__(self, opt)
-        self.loss_names = ["G_GAN", "G_L1", "G_2_L1", "D_real", "D_fake"]
+        self.loss_names = [
+            "G_GAN",
+            "G_L1",
+            "G_2_L1",
+            "G_VGG",  # only if loss_mode includes vgg
+            "G_ID",  # only if loss_mode includes id
+            "D_real",
+            "D_fake",
+        ]
         self.visual_names = ["real_A", "fake_B", "fake_B_2", "real_B"]
         if self.isTrain:
             self.model_names = ["G", "G_2", "D"]
@@ -69,6 +77,22 @@ class Gray2RealModel(BaseModel):
         if self.isTrain:
             self.criterionGAN = networks.GANLoss(opt.gan_mode).to(self.device)
             self.criterionL1 = torch.nn.L1Loss()
+            # Load pretrained VGG feature extractor
+            if opt.loss_mode in ["vgg", "both"]:
+                from torchvision.models import vgg19
+
+                self.vgg = vgg19(pretrained=True).features[:16].eval().to(self.device)
+                for param in self.vgg.parameters():
+                    param.requires_grad = False
+
+            # Load FaceNet model (custom wrapper or preloaded model)
+            if opt.loss_mode in ["id", "both"]:
+                from models.facenet import FaceNet  # customized FaceNet loader
+
+                self.facenet = FaceNet().eval().to(self.device)
+                for param in self.facenet.parameters():
+                    param.requires_grad = False
+
             self.optimizer_G = torch.optim.Adam(
                 self.netG.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999)
             )
@@ -81,7 +105,7 @@ class Gray2RealModel(BaseModel):
             self.optimizers += [self.optimizer_G, self.optimizer_G_2, self.optimizer_D]
 
     def set_input(self, input):
-        assert self.opt.direction in ["gray2real", "face2sketch"]
+        assert self.opt.direction in ["gray2real", "real2gray"]
         gray2real = self.opt.direction == "gray2real"
         self.real_A = input["gray" if gray2real else "photo"].to(self.device)
         self.real_B = input["photo" if gray2real else "gray"].to(self.device)
@@ -101,10 +125,6 @@ class Gray2RealModel(BaseModel):
             "fake_B_2": self.fake_B_2,
             "real_B": self.real_B,
         }
-        # print(
-        #     "[✅ compute_visuals] Set self.visuals with keys:",
-        #     list(self.visuals.keys()),
-        # )
 
     def backward_D(self):
         fake_AB = torch.cat((self.real_A, self.fake_B_2), 1)
@@ -126,7 +146,33 @@ class Gray2RealModel(BaseModel):
         self.loss_G_2_L1 = (
             self.criterionL1(self.fake_B_2, self.real_B) * self.opt.lambda_L1
         )
-        self.loss_G = self.loss_G_GAN + self.loss_G_L1 + self.loss_G_2_L1
+        # VGG Loss (feature-level perceptual loss)
+        if self.opt.loss_mode in ["vgg", "both"]:
+            vgg_feat_fake = self.vgg(self.fake_B_2)
+            vgg_feat_real = self.vgg(self.real_B)
+            self.loss_G_VGG = (
+                self.criterionL1(vgg_feat_fake, vgg_feat_real) * self.opt.lambda_vgg
+            )
+        else:
+            self.loss_G_VGG = torch.tensor(0.0, device=self.device)
+
+        # Identity Loss (FaceNet feature similarity)
+        if self.opt.loss_mode in ["id", "both"]:
+            id_fake = self.facenet(self.fake_B_2)
+            id_real = self.facenet(self.real_B)
+            self.loss_G_ID = (
+                torch.nn.functional.l1_loss(id_fake, id_real) * self.opt.lambda_id
+            )
+        else:
+            self.loss_G_ID = torch.tensor(0.0, device=self.device)
+
+        self.loss_G = (
+            self.loss_G_GAN
+            + self.loss_G_L1
+            + self.loss_G_2_L1
+            + self.loss_G_VGG
+            + self.loss_G_ID
+        )
         self.loss_G.backward()
 
     def optimize_parameters(self):

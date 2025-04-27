@@ -66,6 +66,16 @@ def test(opt):
 
         model.compute_visuals()
 
+        if hasattr(model, "fake_B_2"):
+            fake_b2_tensor = getattr(model, "fake_B_2")
+            print("🔎 fake_B_2 shape:", fake_b2_tensor.shape)
+
+            fake_b2_np = util.tensor2im(fake_b2_tensor)
+            print("🔬 fake_B_2 numpy shape:", fake_b2_np.shape)
+            print("  ➡️ R channel mean:", fake_b2_np[:, :, 0].mean())
+            print("  ➡️ G channel mean:", fake_b2_np[:, :, 1].mean())
+            print("  ➡️ B channel mean:", fake_b2_np[:, :, 2].mean())
+
         visuals = OrderedDict()
         for name in model.visual_names:
             if hasattr(model, name):
