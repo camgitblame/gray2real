@@ -217,7 +217,6 @@ GPU_ID=0 \
 NUM_TEST=50 \
 ./test_model.sh
 ```
-⚡ Note: This model was likely trained for 30 + 30 epochs, so adjust EPOCH if needed.
 
 4. gray2real with FaceNet (Identity) Loss
 ```bash
@@ -241,7 +240,7 @@ NUM_TEST=50 \
 ./test_model.sh
 ```
 
-## Customizable parameters for testing
+## ⚙️ Customizable parameters for testing
 
 | Environment Variable | Description | Default (if any) |
 |:---------------------|:-------------|:----------------|
@@ -256,7 +255,7 @@ NUM_TEST=50 \
 
 
 
-### 🧠 Example for Advanced Testing
+### Example for Advanced Testing
 
 If you wanted to:
 
