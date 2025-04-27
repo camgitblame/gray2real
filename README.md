@@ -5,6 +5,42 @@ This repo contains a training and testing setup for all models from the gray2rea
 
 ---
 
+## 🛠️ Environment Setup Instructions
+
+To prepare the full environment for training and testing models in this project, run the provided setup script:
+
+1. **Go to gray2real project directory:**
+
+```bash
+cd gray2real/
+```
+
+2. Make sure the setup script is executable (This is only needed the first time)
+```bash
+chmod +x setup.sh
+```
+
+3. Run the setup script:
+```bash
+./setup.sh
+```
+
+## 🔥 What this script does:
+
+| Step | What It Does | Details |
+|:----|:-------------|:--------|
+| 1 | Loads modules | Loads necessary compilers, CUDA 11.2 |
+| 2 | Sets up proxies | Configures HTTP/HTTPS proxy if running behind a firewall (City University proxy) |
+| 3 | Installs `pyenv` and `pyenv-virtualenv` | Only if they are missing |
+| 4 | Installs Python 3.9.5 | From source, with proxy-aware build settings |
+| 5 | Creates a clean virtualenv `gray_env` | Deletes any existing `gray_env` if found |
+| 6 | Activates the new virtualenv | Ensures the virtual environment is properly used |
+| 7 | Upgrades `pip`, `setuptools`, `wheel` | Keeps packaging tools up-to-date |
+| 8 | Installs Python dependencies | Installs all packages from `requirements.txt` |
+| 9 | Installs PyTorch with CUDA 11.8 | Ensures GPU acceleration is set up |
+| 10 | Final checks | Shows Python version, lists installed torch and wandb versions |
+
+
 ## 🚀 Usage
 
 ### ✅ Train a model via SLURM
@@ -100,7 +136,7 @@ When using `run_model.sh` or `run_all.sh`, you can override the default training
 
 | Variable            | Description                                                       | Example                         |
 |---------------------|-------------------------------------------------------------------|---------------------------------|
-| `MODEL_TYPE`        | Model variant to train (must match implemented class name)       | `gray2real`, `gray2real`        |
+| `MODEL_TYPE`        | Model variant to train (must match implemented class name)       | `gray2real`, `gray2real_baseline`        |
 | `EXPERIMENT_NAME`   | Name used for saving logs and checkpoints                        | `gray2real_final`               |
 | `DATASET`           | Path to the training dataset                                      | `./datasets/cuhk`               |
 | `DIRECTION`         | Translation direction (e.g., `gray2real`, `AtoB`)                 | `gray2real`                     |
@@ -202,5 +238,41 @@ EXPERIMENT_NAME=gray2real_final_both \
 EPOCH=60 \
 GPU_ID=0 \
 NUM_TEST=50 \
+./test_model.sh
+```
+
+## Customizable parameters for testing
+
+| Environment Variable | Description | Default (if any) |
+|:---------------------|:-------------|:----------------|
+| `MODEL_TYPE`          | Model type to load | Required |
+| `EXPERIMENT_NAME`     | Folder name to load checkpoints | Required |
+| `EPOCH`               | Which epoch to test (`latest`, `60`, etc.) | `latest` |
+| `GPU_ID`              | Which GPU to use | `0` |
+| `NUM_TEST`            | Number of images to test | All |
+| `DATAROOT`            | Dataset path | Default set inside `test_model.sh` |
+| `RESULTS_DIR`         | Where to save outputs | `./results` |
+| `PHASE`               | Testing phase | `test` |
+
+
+
+### 🧠 Example for Advanced Testing
+
+If you wanted to:
+
+- Use epoch `latest`
+- Test 100 images
+- Save results somewhere else
+
+You would run:
+
+```bash
+MODEL_TYPE=gray2real \
+EXPERIMENT_NAME=gray2real_final_vgg \
+EPOCH=latest \
+GPU_ID=0 \
+NUM_TEST=100 \
+RESULTS_DIR=./results_vgg \
+PHASE=test \
 ./test_model.sh
 ```
