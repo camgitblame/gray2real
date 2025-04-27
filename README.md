@@ -275,3 +275,9 @@ RESULTS_DIR=./results_vgg \
 PHASE=test \
 ./test_model.sh
 ```
+
+
+
+## 📊 Wandb Log
+
+You can view the full Gray2Real wandb log [here](https://wandb.ai/camgitblame-city-university-of-london/gray2real_final/reports/Gray2Real-Report--VmlldzoxMjQ5MTU0OA?accessToken=eru8bnkzauo6rb3b2h029t35wq1f24kxggsrudchhc1enrhz6pib8yxw0rqd6hwi).
