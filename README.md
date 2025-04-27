@@ -91,8 +91,6 @@ GPU_ID=0 \
 ./run_model.sh
 ```
 
-```
-
 
 ---
 
@@ -115,19 +113,6 @@ When using `run_model.sh` or `run_all.sh`, you can override the default training
 | `SAVE_BY_ITER`      | Save by iteration number instead of by epoch (true/false)        | `false`                         |
 | `OFFLINE`           | Set to `true` to log to WandB offline, `false` for online        | `false`                         |
 
-### 🧠 Example Usage
-
-```bash
-MODEL_TYPE=gray2real \
-EXPERIMENT_NAME=gray2real_final \
-NITER=200 \
-NITER_DECAY=100 \
-SAVE_EPOCH_FREQ=1 \
-PRINT_FREQ=50 \
-SAVE_BY_ITER=false \
-GPU_ID=0 \
-./run_model.sh
-```
 
 
 ## 🛠️ Advanced
@@ -167,8 +152,6 @@ To test a model:
 1. Baseline Model
 
 ```bash
-Copy
-Edit
 MODEL_TYPE=gray2real_baseline \
 EXPERIMENT_NAME=gray2real_baseline \
 EPOCH=60 \
