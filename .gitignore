@@ -1,5 +1,4 @@
 # Ignore model outputs
-checkpoints/
 outputs/
 wandb/
 gray_env/
@@ -11,7 +10,6 @@ options/unused/
 scripts/
 util/unused/
 facenet-pytorch/
-results/
 
 # Ignore system files
 .DS_Store
