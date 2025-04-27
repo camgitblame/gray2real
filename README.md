@@ -31,7 +31,7 @@ chmod +x setup.sh
 ./setup.sh
 ```
 
-## 🔥 What this script does:
+## What this script does:
 
 | Step | What It Does | Details |
 |:----|:-------------|:--------|
