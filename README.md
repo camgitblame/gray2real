@@ -5,6 +5,12 @@ This repo contains a training and testing setup for all models from the gray2rea
 
 ---
 
+## 📊 Wandb Log
+
+You can view the full Gray2Real wandb log [here](https://wandb.ai/camgitblame-city-university-of-london/gray2real_final/reports/Gray2Real-Report--VmlldzoxMjQ5MTU0OA?accessToken=eru8bnkzauo6rb3b2h029t35wq1f24kxggsrudchhc1enrhz6pib8yxw0rqd6hwi).
+
+---
+
 ## 🛠️ Environment Setup Instructions
 
 To prepare the full environment for training and testing models in this project, run the provided setup script:
@@ -278,6 +284,4 @@ PHASE=test \
 
 
 
-## 📊 Wandb Log
 
-You can view the full Gray2Real wandb log [here](https://wandb.ai/camgitblame-city-university-of-london/gray2real_final/reports/Gray2Real-Report--VmlldzoxMjQ5MTU0OA?accessToken=eru8bnkzauo6rb3b2h029t35wq1f24kxggsrudchhc1enrhz6pib8yxw0rqd6hwi).
