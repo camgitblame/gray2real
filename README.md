@@ -11,7 +11,7 @@ You can view the full Gray2Real wandb log [here](https://wandb.ai/camgitblame-ci
 
 ---
 
-## 🛠Environment Setup Instructions
+## Environment Setup Instructions
 
 To prepare the full environment for training and testing models in this project, run the provided setup script:
 
