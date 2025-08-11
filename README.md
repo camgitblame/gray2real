@@ -5,13 +5,13 @@ This repo contains a training and testing setup for all models from the gray2rea
 
 ---
 
-## 📊 Wandb Log
+## Wandb Log
 
 You can view the full Gray2Real wandb log [here](https://wandb.ai/camgitblame-city-university-of-london/gray2real_final/reports/Gray2Real-Report--VmlldzoxMjQ5MTU0OA?accessToken=eru8bnkzauo6rb3b2h029t35wq1f24kxggsrudchhc1enrhz6pib8yxw0rqd6hwi).
 
 ---
 
-## 🛠️ Environment Setup Instructions
+## 🛠Environment Setup Instructions
 
 To prepare the full environment for training and testing models in this project, run the provided setup script:
 
@@ -31,25 +31,10 @@ chmod +x setup.sh
 ./setup.sh
 ```
 
-## 🔥 What this script does:
 
-| Step | What It Does | Details |
-|:----|:-------------|:--------|
-| 1 | Loads modules | Loads necessary compilers, CUDA 11.2 |
-| 2 | Sets up proxies | Configures HTTP/HTTPS proxy if running behind a firewall (City University proxy) |
-| 3 | Installs `pyenv` and `pyenv-virtualenv` | Only if they are missing |
-| 4 | Installs Python 3.9.5 | From source, with proxy-aware build settings |
-| 5 | Creates a clean virtualenv `gray_env` | Deletes any existing `gray_env` if found |
-| 6 | Activates the new virtualenv | Ensures the virtual environment is properly used |
-| 7 | Upgrades `pip`, `setuptools`, `wheel` | Keeps packaging tools up-to-date |
-| 8 | Installs Python dependencies | Installs all packages from `requirements.txt` |
-| 9 | Installs PyTorch with CUDA 11.8 | Ensures GPU acceleration is set up |
-| 10 | Final checks | Shows Python version, lists installed torch and wandb versions |
+## Usage
 
-
-## 🚀 Usage
-
-### ✅ Train a model via SLURM
+### Train a model via SLURM
 
 1. Baseline
 
@@ -136,7 +121,7 @@ GPU_ID=0 \
 
 ---
 
-## ⚙️ Customizable Parameters for Training
+## ⚙Customizable Parameters for Training
 
 When using `run_model.sh` or `run_all.sh`, you can override the default training settings by passing environment variables. Here's a full list of customizable options:
 
@@ -157,36 +142,18 @@ When using `run_model.sh` or `run_all.sh`, you can override the default training
 
 
 
-## 🛠️ Advanced
+## Advanced
 
-### ✅ Train all models at once
+### Train all models at once
 
 ```bash
 bash ./run_all.sh
 ```
 
-## 📡 Monitoring Training Jobs on Hyperion
-
-If you've launched jobs using `run_all.sh`, here's how to monitor them:
-
-### 🧾 Log Files
-Each model's logs (stdout/stderr) are saved under:
-
-results/logs/<MODEL_NAME>_<JOBID>.out
-
-
-### 🔍 Live Monitoring Tips
-
-| Task                   | Command |
-|------------------------|---------|
-| 📖 View live log output | `tail -f results/logs/*.out` |
-| 📋 View queued jobs     | `squeue -u $USER` |
-
----
 
 Make sure your environment is activated and configured before launching or tailing jobs.
 
-## 🧪 Testing a Model
+## Testing a Model
 
 To test a model:
 
@@ -246,7 +213,7 @@ NUM_TEST=50 \
 ./test_model.sh
 ```
 
-## ⚙️ Customizable parameters for testing
+## Customizable parameters for testing
 
 | Environment Variable | Description | Default (if any) |
 |:---------------------|:-------------|:----------------|
