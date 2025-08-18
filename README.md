@@ -1,4 +1,14 @@
+
 # gray2real Pipeline
+
+## Overview
+
+gray2real is a deep learning pipeline for translating grayscale face sketches to realistic color portraits. The project improves pix2pix (cGAN) and incorporates advanced loss functions (L1, VGG, FaceNet Identity) to improve the quality and identity preservation of generated images. 
+
+## Tech Stack
+
+- Python, PyTorch, NumPy, PIL, OpenCV
+- Jupyter Notebook, CUDA, SLURM, wandb
 
 This repo contains a training and testing setup for all models from the gray2real projects.
 
@@ -34,7 +44,7 @@ chmod +x setup.sh
 
 ## Usage
 
-### Train a model via SLURM
+### Train a model 
 
 1. Baseline
 
