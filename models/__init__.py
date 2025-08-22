@@ -62,8 +62,8 @@ def create_model(opt):
     try:
         model = find_model_using_name(opt.model)
         instance = model(opt)
-        print(f"[{opt.name}] ✅ Model [{type(instance).__name__}] was created.")
+        print(f"[{opt.name}] Model [{type(instance).__name__}] was created.")
         return instance
     except Exception as e:
-        print(f"[{opt.name}] ❌ Failed to create model '{opt.model}': {str(e)}")
+        print(f"[{opt.name}] Failed to create model '{opt.model}': {str(e)}")
         raise

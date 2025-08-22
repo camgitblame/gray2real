@@ -43,7 +43,7 @@ class Visualizer:
         with open(self.log_name, "a") as log_file:
             log_file.write(message + "\n")
 
-        # ✅ Onl log tracked losses to keep WandB clean
+        # Onl log tracked losses to keep WandB clean
         tracked = ["G_GAN", "G_L1", "G_2_L1", "D_real", "D_fake"]
         log_dict = {f"loss/{k}": v for k, v in losses.items() if k in tracked}
         self.logger.log(log_dict, step=total_iters)

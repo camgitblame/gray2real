@@ -101,9 +101,7 @@ class BaseModel(ABC):
                 load_suffix = "latest"
             else:
                 load_suffix = opt.epoch
-            print(
-                f"[{opt.name}] 📦 Loading model checkpoint with suffix: {load_suffix}"
-            )
+            print(f"[{opt.name}] Loading model checkpoint with suffix: {load_suffix}")
             self.load_networks(load_suffix)
 
         self.print_networks(opt.verbose)
@@ -114,7 +112,7 @@ class BaseModel(ABC):
             if isinstance(name, str):
                 net = getattr(self, "net" + name, None)
                 if net is None:
-                    print(f"⚠️  Skipping '{name}' (not defined in this model).")
+                    print(f"Skipping '{name}' (not defined in this model).")
                     continue
 
                 net.eval()
@@ -221,22 +219,22 @@ class BaseModel(ABC):
                     fallback_name = name[0]  # first character e.g., "G"
                     fallback_filename = f"{epoch}_net_{fallback_name}.pth"
                     full_path = os.path.join(self.save_dir, fallback_filename)
-                    print(f"⚠️  Fallback: using {fallback_filename} for {name}")
+                    print(f"Fallback: using {fallback_filename} for {name}")
 
                 # Check file exists
                 if not os.path.isfile(full_path):
-                    print(f"❌ Checkpoint file not found: {full_path}")
+                    print(f"Checkpoint file not found: {full_path}")
                     print(
-                        f"💡 Hint: make sure you passed the correct --epoch or --load_iter."
+                        f"Hint: make sure you passed the correct --epoch or --load_iter."
                     )
                     continue
 
-                print(f"📥 Loading weights for '{name}' from {full_path}")
+                print(f"Loading weights for '{name}' from {full_path}")
 
                 # Load model
                 net = getattr(self, "net" + name, None)
                 if net is None:
-                    print(f"⚠️  Skipping '{name}' (not defined in this model).")
+                    print(f"Skipping '{name}' (not defined in this model).")
                     continue
 
                 if isinstance(net, torch.nn.DataParallel):

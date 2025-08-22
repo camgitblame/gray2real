@@ -857,7 +857,7 @@ class UnetSkipConnectionBlock(nn.Module):
         else:
             out = self.model(x)
 
-            # 🧠 Apply attention before skip connection if block ends with it
+            # Apply attention before skip connection if block ends with it
             # Only if SelfAttn is part of the model
             for m in self.model:
                 if isinstance(m, SelfAttn):

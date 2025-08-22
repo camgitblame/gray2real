@@ -118,7 +118,7 @@ class Gray2RealModel(BaseModel):
         self.fake_B_2 = self.netG_2(self.fake_B)
 
     def compute_visuals(self):
-        # print("🎨 [gray2real_model] compute_visuals() called")
+        # print("[gray2real_model] compute_visuals() called")
         self.visuals = {
             "real_A": self.real_A,
             "fake_B": self.fake_B,
@@ -191,8 +191,8 @@ class Gray2RealModel(BaseModel):
 
     def test(self):
         """Run forward and compute visuals (for inference)."""
-        # print("[🔥 test()] Running inference + visuals")
+        # print("[test()] Running inference + visuals")
         with torch.no_grad():
             self.forward()
             self.compute_visuals()
-            # print("✅ gray2real_model.test() called")
+            # print("gray2real_model.test() called")

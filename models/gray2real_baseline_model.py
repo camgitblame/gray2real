@@ -19,7 +19,7 @@ class Gray2RealBaselineModel(BaseModel):
         self.loss_names = ["G_GAN", "G_L1", "D_real", "D_fake"]
         self.visual_names = ["real_A", "fake_B", "real_B"]
         self.model_names = ["G", "D"] if self.isTrain else ["G"]
-        # ✅ Ensure G_2 is not part of model_names
+        # Ensure G_2 is not part of model_names
         if "G_2" in self.model_names:
             self.model_names.remove("G_2")
 
@@ -109,7 +109,7 @@ class Gray2RealBaselineModel(BaseModel):
         self.backward_G()
         self.optimizer_G.step()
 
-    # 🧪 Inference methods for testing
+    # Inference methods for testing
     def test(self):
         """Run forward pass and store visuals."""
         with torch.no_grad():

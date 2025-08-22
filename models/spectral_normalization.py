@@ -9,12 +9,12 @@ from torch.nn import Parameter
 
 
 def l2normalize(v, eps=1e-12):
-    """🧮 L2-normalize a vector with small epsilon for numerical stability"""
+    """L2-normalize a vector with small epsilon for numerical stability"""
     return v / (v.norm() + eps)
 
 
 class SpectralNorm(nn.Module):
-    """⚖️ Spectral Normalization wrapper for stable GAN training
+    """Spectral Normalization wrapper for stable GAN training
 
     Parameters:
         module (nn.Module): the layer to wrap (e.g. Conv2d, Linear)
@@ -31,7 +31,7 @@ class SpectralNorm(nn.Module):
             self._make_params()
 
     def _update_u_v(self):
-        """🔁 Update the approximation of singular vectors u and v via power iteration"""
+        """Update the approximation of singular vectors u and v via power iteration"""
         u = getattr(self.module, self.name + "_u")
         v = getattr(self.module, self.name + "_v")
         w = getattr(self.module, self.name + "_bar")
@@ -46,7 +46,7 @@ class SpectralNorm(nn.Module):
         setattr(self.module, self.name, w / sigma.expand_as(w))
 
     def _made_params(self):
-        """✅ Check if spectral norm params are already registered"""
+        """Check if spectral norm params are already registered"""
         try:
             getattr(self.module, self.name + "_u")
             getattr(self.module, self.name + "_v")
@@ -56,7 +56,7 @@ class SpectralNorm(nn.Module):
             return False
 
     def _make_params(self):
-        """🧠 Register u, v, and w_bar as module parameters"""
+        """Register u, v, and w_bar as module parameters"""
         w = getattr(self.module, self.name)
 
         height = w.data.shape[0]
@@ -75,6 +75,6 @@ class SpectralNorm(nn.Module):
         self.module.register_parameter(self.name + "_bar", w_bar)
 
     def forward(self, *args):
-        """🚀 Forward pass with updated spectral normalization"""
+        """Forward pass with updated spectral normalization"""
         self._update_u_v()
         return self.module(*args)

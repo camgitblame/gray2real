@@ -131,7 +131,7 @@ GPU_ID=0 \
 
 ---
 
-## ⚙Customizable Parameters for Training
+## Customizable Parameters for Training
 
 When using `run_model.sh` or `run_all.sh`, you can override the default training settings by passing environment variables. Here's a full list of customizable options:
 
