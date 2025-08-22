@@ -8,7 +8,7 @@ gray2real is a deep learning pipeline for translating grayscale face sketches to
 ## Tech Stack
 
 - Python, PyTorch, NumPy, PIL, OpenCV
-- Jupyter Notebook, CUDA, SLURM, wandb
+- GPU, CUDA, SLURM, wandb
 
 This repo contains a training and testing setup for all models from the gray2real projects.
 
