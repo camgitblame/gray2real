@@ -223,9 +223,9 @@ NUM_TEST=50 \
 ./test_model.sh
 ```
 
-## Customizable parameters for testing
+## Parameters for testing
 
-| Environment Variable | Description | Default (if any) |
+| Environment Variable | Description | Default |
 |:---------------------|:-------------|:----------------|
 | `MODEL_TYPE`          | Model type to load | Required |
 | `EXPERIMENT_NAME`     | Folder name to load checkpoints | Required |
